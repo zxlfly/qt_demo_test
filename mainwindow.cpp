@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_flashTestTimer = new QTimer(this);
     m_flashTestCounter = 0;
+    // 每个独立的闪烁区域一个 FlashTextManager 实例，有多少个就实例化多少个就行
     m_flashTextManager = new FlashTextManager(2, 2, this);
     ui->verticalLayout_3->addWidget(m_flashTextManager);
     // 设置闪烁区域标签（2行2列）

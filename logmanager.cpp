@@ -11,12 +11,7 @@ LogManager::LogManager(QObject *parent)
     connect(m_timer, &QTimer::timeout, this, &LogManager::onTimeout);
 }
 
-LogManager::~LogManager()
-{
-    if (m_timer->isActive()) {
-        m_timer->stop();
-    }
-}
+LogManager::~LogManager()=default;
 
 // void LogManager::setDisplay(QTextEdit *display)
 // {

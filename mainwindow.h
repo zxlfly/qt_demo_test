@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "logmanager.h"
 #include "flashtextmanager.h"
-
+class LogDisplay;
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;

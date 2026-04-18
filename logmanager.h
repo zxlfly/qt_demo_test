@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QVariantMap>
 // #include <QTextEdit>
-#include "logdisplay.h"
 
 // 可调常量
 /*constexpr int MAX_LOG_LINES = 1000;  */         // 最大显示行数
