@@ -11,14 +11,18 @@ FlashCell::FlashCell(QWidget *parent)
     , m_timer(new QTimer(this))
     , m_visible(true)
 {
+    this->setAttribute(Qt::WA_StyledBackground);
+    this->setStyleSheet("FlashCell { border-right: 1px solid #555555; "
+                        "border-bottom: 1px solid #555555;}");
     // 水平布局
     auto *layout = new QHBoxLayout(this);
     layout->setSpacing(5);
     layout->setContentsMargins(5, 2, 5, 2);
 
-    // 固定标签
-    m_label->setStyleSheet("color: #FFFFFF;");
+    // 固定标签 min-width: 40px; max-width: 40px;
+    m_label->setStyleSheet("color: #FFFFFF;background-color:black;min-width: 30px; max-width: 30px;");
     layout->addWidget(m_label);
+    // m_label->setFixedWidth(10);
 
     // 闪烁文字（黄色）
     m_flashLabel->setStyleSheet("color: #FFD700;");

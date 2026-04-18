@@ -8,9 +8,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_flashTestTimer(new QTimer(this))
-    , m_flashTestCounter(0)
-    , m_flashTextManager(new FlashTextManager(2, 2, this))
 {
     ui->setupUi(this);
     m_logDisplay1 = new LogDisplay(ui->logTextEdit, this);
@@ -34,14 +31,16 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::onLogProcessed);
     generateTestLog();
     // 将 FlashTextManager 添加到 UI 容器的布局中
-    ui->verticalLayout_3->addWidget(m_flashTextManager);
 
+    m_flashTestTimer = new QTimer(this);
+    m_flashTestCounter = 0;
+    m_flashTextManager = new FlashTextManager(2, 2, this);
+    ui->verticalLayout_3->addWidget(m_flashTextManager);
     // 设置闪烁区域标签（2行2列）
     m_flashTextManager->setLabel(0, 0, "a:");
-    m_flashTextManager->setLabel(0, 1, "b:");
+    m_flashTextManager->setLabel(0, 1, "b右:");
     m_flashTextManager->setLabel(1, 0, "c:");
     m_flashTextManager->setLabel(1, 1, "d:");
-
     // 启动闪烁测试：每 2 秒切换一次闪烁状态
     connect(m_flashTestTimer, &QTimer::timeout, this, &MainWindow::testFlashText);
     m_flashTestTimer->start(2000);

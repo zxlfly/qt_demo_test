@@ -24,7 +24,7 @@
        <item>
         <widget class="QTextEdit" name="logTextEdit">
          <property name="styleSheet">
-          <string notr="true">bankground-color:#000;</string>
+          <string notr="true">background-color:black;</string>
          </property>
          <property name="readOnly">
           <bool>true</bool>
@@ -33,6 +33,9 @@
        </item>
        <item>
         <widget class="QTextEdit" name="logTextEdit_2">
+         <property name="styleSheet">
+          <string notr="true">background-color:black;</string>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -43,6 +46,9 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox_2">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="title">
        <string>文本闪烁区域</string>
       </property>

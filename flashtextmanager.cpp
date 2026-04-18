@@ -56,8 +56,8 @@ int FlashTextManager::cols() const
 void FlashTextManager::setupCells()
 {
     auto *layout = new QGridLayout(this);
-    layout->setSpacing(5);
-    layout->setContentsMargins(5, 5, 5, 5);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     for (int r = 0; r < m_rows; ++r) {
         for (int c = 0; c < m_cols; ++c) {
@@ -66,6 +66,8 @@ void FlashTextManager::setupCells()
             layout->addWidget(cell, r, c);
         }
     }
+    this->setAttribute(Qt::WA_StyledBackground);
+    this->setStyleSheet("FlashTextManager { border: 1px solid #555555; }");
 }
 
 int FlashTextManager::cellIndex(int row, int col) const
