@@ -6,7 +6,6 @@
 LogManager::LogManager(QObject *parent)
     : QObject(parent)
     , m_timer(new QTimer(this))
-    , m_display(nullptr)
     , m_outputInterval(LOG_OUTPUT_INTERVAL_MS)
 {
     connect(m_timer, &QTimer::timeout, this, &LogManager::onTimeout);
@@ -19,13 +18,13 @@ LogManager::~LogManager()
     }
 }
 
-void LogManager::setDisplay(QTextEdit *display)
-{
-    m_display = display;
-    if (m_display) {
-        m_display->setReadOnly(true);
-    }
-}
+// void LogManager::setDisplay(QTextEdit *display)
+// {
+//     m_display = display;
+//     if (m_display) {
+//         m_display->setReadOnly(true);
+//     }
+// }
 
 void LogManager::setOutputInterval(int ms)
 {
@@ -62,26 +61,24 @@ void LogManager::onTimeout()
 
     LogEntry entry = m_queue.dequeue();
 
-    if (m_display) {
-        QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 
-        // 使用 HTML 富文本设置颜色：时间白色（等宽字体固定宽度），内容黄色
-        QString html = QString("<span style=\"color: #FFFFFF; font-family: 'Courier New', monospace;\">%1</span>  <span style=\"color: #FFD700;\">%2</span>")
-                           .arg(timestamp, entry.content);
+    // 使用 HTML 富文本设置颜色：时间白色（等宽字体固定宽度），内容黄色
+    QString html = QString("<span style=\"color: #FFFFFF; font-family: 'Courier New', monospace;\">%1</span>  <span style=\"color: #FFD700;\">%2</span>")
+                       .arg(timestamp, entry.content);
 
-        m_display->append(html);
+    // m_display->append(html);
 
-        // 限制最大行数
-        if (m_display->document()->blockCount() > MAX_LOG_LINES) {
-            QTextCursor cursor(m_display->document());
-            cursor.movePosition(QTextCursor::Start);
-            cursor.select(QTextCursor::BlockUnderCursor);
-            cursor.removeSelectedText();
-        }
+    // // 限制最大行数
+    // if (m_display->document()->blockCount() > MAX_LOG_LINES) {
+    //     QTextCursor cursor(m_display->document());
+    //     cursor.movePosition(QTextCursor::Start);
+    //     cursor.select(QTextCursor::BlockUnderCursor);
+    //     cursor.removeSelectedText();
+    // }
 
-        // 自动滚动到底部
-        m_display->moveCursor(QTextCursor::End);
-    }
-
+    // // 自动滚动到底部
+    // m_display->moveCursor(QTextCursor::End);
+    emit logReady(html);
     emit logProcessed(entry);
 }

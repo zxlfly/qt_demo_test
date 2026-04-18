@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         flashcell.h
         flashtextmanager.cpp
         flashtextmanager.h
+        logdisplay.h
+        logdisplay.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

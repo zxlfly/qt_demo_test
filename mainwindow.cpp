@@ -1,32 +1,38 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "logmanager.h"
+#include "logdisplay.h"
 #include <QDebug>
 #include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_logManager(new LogManager(this))
-    , m_testTimer(new QTimer(this))
-    , m_testCounter(0)
     , m_flashTestTimer(new QTimer(this))
     , m_flashTestCounter(0)
     , m_flashTextManager(new FlashTextManager(2, 2, this))
 {
     ui->setupUi(this);
-
+    m_logDisplay1 = new LogDisplay(ui->logTextEdit, this);
+    m_logDisplay2 = new LogDisplay(ui->logTextEdit_2,this);
     // 绑定日志显示控件
-    m_logManager->setDisplay(ui->logTextEdit);
+    m_logA = new LogManager(this);
+    connect(m_logA, &LogManager::logReady,m_logDisplay1,&LogDisplay::appendHtml);
+
+    m_logB = new LogManager(this);
+    connect(m_logB, &LogManager::logReady,m_logDisplay1,&LogDisplay::appendHtml);
+
+    m_logC = new LogManager(this);
+    connect(m_logC, &LogManager::logReady,m_logDisplay2,&LogDisplay::appendHtml);
 
     // 连接信号槽：每条日志输出后触发 onLogProcessed
-    connect(m_logManager, &LogManager::logProcessed,
+    connect(m_logA, &LogManager::logProcessed,
             this, &MainWindow::onLogProcessed);
-
-    // 启动测试日志生成器：每 500ms 生成一条测试日志
-    connect(m_testTimer, &QTimer::timeout, this, &MainWindow::generateTestLog);
-    m_testTimer->start(500);
-
+    connect(m_logB, &LogManager::logProcessed,
+            this, &MainWindow::onLogProcessed);
+    connect(m_logC, &LogManager::logProcessed,
+            this, &MainWindow::onLogProcessed);
+    generateTestLog();
     // 将 FlashTextManager 添加到 UI 容器的布局中
     ui->verticalLayout_3->addWidget(m_flashTextManager);
 
@@ -59,45 +65,36 @@ void MainWindow::onLogProcessed(const LogEntry &entry)
 
 void MainWindow::generateTestLog()
 {
-    static const QStringList testMessages = {
-        "系统启动完成",
-        "正在加载配置文件",
-        "连接数据库成功",
-        "检测到新设备接入",
-        "正在同步数据",
-        "任务队列已清空",
-        "收到用户指令",
-        "开始执行批处理任务",
-        "缓存已刷新",
-        "网络连接正常",
-        "系统启动完成",
-        "正在加载配置文件",
-        "连接数据库成功",
-        "检测到新设备接入",
-        "正在同步数据",
-        "任务队列已清空",
-        "收到用户指令",
-        "开始执行批处理任务",
-        "缓存已刷新",
-        "网络连接正常"
+    // 构造函数里，替代定时器的方式
+    static const QStringList testMessagesA = {
+        "LOGA1", "LOGA2", "LOGA3", "LOGA4", "LOGA5",
+        "LOGA6", "LOGA7", "LOGA8", "LOGA9", "LOGA10",
     };
+    static const QStringList testMessagesB = {
+        "logb1", "logb2", "logb3", "logb4", "logb5",
+        "logb6", "logb7", "logb8", "logb9", "logb10",
+    };
+    static const QStringList testMessagesC = {
+        "C1", "C2", "C3", "C4", "C5",
+        "C6", "C7", "C8", "C9", "C10",
+    };
+    for (int i = 0; i < 20; ++i) {
+        LogEntry entryA;
+        entryA.content = testMessagesA[i % testMessagesA.size()];
+        entryA.extra["type"] = "info";
+        m_logA->appendLog(entryA);
 
-    LogEntry entry;
-    entry.content = testMessages[m_testCounter % testMessages.size()];
-    entry.extra["type"] = "info";
-    entry.extra["seq"] = m_testCounter;
+        LogEntry entryB;
+        entryB.content = testMessagesB[i % testMessagesB.size()];
+        entryB.extra["type"] = "info";
+        m_logB->appendLog(entryB);
 
-    m_logManager->appendLog(entry);
-    m_testCounter++;
-
-    // 生成 20 条后停止测试
-    if (m_testCounter >= 20) {
-        m_testTimer->stop();
-        LogEntry done;
-        done.content = "测试日志生成完毕";
-        done.extra["type"] = "success";
-        m_logManager->appendLog(done);
+        LogEntry entryC;
+        entryC.content = testMessagesC[i % testMessagesC.size()];
+        entryC.extra["type"] = "info";
+        m_logC->appendLog(entryC);
     }
+
 }
 
 void MainWindow::testFlashText()

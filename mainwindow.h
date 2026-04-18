@@ -30,11 +30,15 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    LogManager *m_logManager;
-    QTimer *m_testTimer;
-    int m_testCounter;
+
     QTimer *m_flashTestTimer;
     int m_flashTestCounter;
     FlashTextManager *m_flashTextManager;
+    // 日志相关
+    LogDisplay *m_logDisplay1;
+    LogDisplay *m_logDisplay2;
+    LogManager *m_logA;
+    LogManager *m_logB;
+    LogManager *m_logC;
 };
 #endif // MAINWINDOW_H

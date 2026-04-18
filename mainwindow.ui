@@ -23,6 +23,16 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTextEdit" name="logTextEdit">
+         <property name="styleSheet">
+          <string notr="true">bankground-color:#000;</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="logTextEdit_2">
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -36,8 +46,7 @@
       <property name="title">
        <string>文本闪烁区域</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout_3"/>
      </widget>
     </item>
    </layout>
