@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "logmanager.h"
 #include "flashtextmanager.h"
+#include "missileanimator.h"
 class LogDisplay;
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +28,10 @@ private slots:
     void generateTestLog();
     // 测试闪烁文字
     void testFlashText();
+    // 测试导弹发射动画
+    void testMissileLaunch();
+    // 导弹动画结束回调
+    void onMissileFinished();
 
 private:
     Ui::MainWindow *ui;
@@ -40,5 +45,8 @@ private:
     LogManager *m_logA;
     LogManager *m_logB;
     LogManager *m_logC;
+    // 导弹动画相关
+    MissileAnimator *m_missileAnimator;
+    QTimer *m_missileTestTimer;
 };
 #endif // MAINWINDOW_H

@@ -45,6 +45,18 @@ MainWindow::MainWindow(QWidget *parent)
     // 启动闪烁测试：每 2 秒切换一次闪烁状态
     connect(m_flashTestTimer, &QTimer::timeout, this, &MainWindow::testFlashText);
     m_flashTestTimer->start(2000);
+
+    // 导弹动画：绑定 UI 中已有的 QLabel
+    m_missileAnimator = new MissileAnimator(ui->label, this);
+    connect(m_missileAnimator, &MissileAnimator::finished,
+            this, &MainWindow::onMissileFinished);
+
+    // 先渲染图片，3 秒后自动启动发射动画
+    m_missileAnimator->renderImage(":/images/d.png");
+    m_missileTestTimer = new QTimer(this);
+    m_missileTestTimer->setSingleShot(true);
+    connect(m_missileTestTimer, &QTimer::timeout, this, &MainWindow::testMissileLaunch);
+    m_missileTestTimer->start(3000);
 }
 
 MainWindow::~MainWindow()
@@ -128,4 +140,23 @@ void MainWindow::testFlashText()
         m_flashTextManager->stopAll();
         qDebug() << "闪烁测试结束";
     }
+}
+
+void MainWindow::testMissileLaunch()
+{
+    qDebug() << "启动导弹发射动画";
+    m_missileAnimator->launch();
+}
+
+void MainWindow::onMissileFinished()
+{
+    qDebug() << "导弹动画结束";
+
+    // 动画结束后，3 秒后重新渲染图片并再次发射，循环演示
+    QTimer::singleShot(3000, this, [this]() {
+        m_missileAnimator->renderImage(":/images/d.png");
+        QTimer::singleShot(2000, this, [this]() {
+            m_missileAnimator->launch();
+        });
+    });
 }

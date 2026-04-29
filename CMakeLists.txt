@@ -25,6 +25,9 @@ set(PROJECT_SOURCES
         flashtextmanager.h
         logdisplay.h
         logdisplay.cpp
+        missileanimator.h
+        missileanimator.cpp
+        res.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
